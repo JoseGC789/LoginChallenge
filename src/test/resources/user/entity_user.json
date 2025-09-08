@@ -1,0 +1,33 @@
+{
+  "id": "08a9cb2b-8fdc-47e9-87b5-33fa95694d20",
+  "name": "solid state",
+  "email": "Simone45@yahoo.com",
+  "password": null,
+  "salt": "aad0d0e2-b2b9-41d2-ab0e-7e7bff8f5a37",
+  "created": [
+    2025,
+    9,
+    7,
+    20,
+    2,
+    52,
+    726599000
+  ],
+  "lastLogin": null,
+  "token": null,
+  "roles": [
+    {
+      "id": 0,
+      "name": "USER"
+    }
+  ],
+  "phones": [
+    {
+      "id": null,
+      "number": 123123123,
+      "cityCode": 123,
+      "countryCode": "123"
+    }
+  ],
+  "active": false
+}

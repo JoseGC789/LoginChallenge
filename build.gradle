@@ -1,0 +1,108 @@
+buildscript {
+    ext {
+        springVer = "2.5.14"
+        lombokVer = "1.18.40"
+        gradleWrapperVer = "7.4"
+        jwtVer = "0.9.1"
+        sonarqubeVer = '6.2.0.5505'
+        sonarlintVer = '5.1.10'
+        pitestVer = '1.15.0'
+
+        recommendedThreads = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'idea'
+    id 'org.springframework.boot' version "${springVer}"
+    id 'codenarc'
+    id 'org.sonarqube' version "${sonarqubeVer}"
+    id 'name.remal.sonarlint' version "${sonarlintVer}"
+    id 'info.solidsoft.pitest' version "${pitestVer}"
+    id 'jacoco'
+}
+
+group = 'com.josegc'
+version = '0.0.1-SNAPSHOT'
+description = 'Login Code Challenge'
+
+compileJava {
+    setSourceCompatibility('11')
+    setTargetCompatibility('11')
+    options.compilerArgs.add('-parameters')
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+
+dependencies {
+    implementation platform("org.springframework.boot:spring-boot-dependencies:${springVer}")
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    compileOnly "org.projectlombok:lombok:${lombokVer}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVer}"
+    implementation "com.h2database:h2"
+    implementation "io.jsonwebtoken:jjwt:${jwtVer}"
+}
+
+tasks.named('test') {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+wrapper {
+    setGradleVersion(gradleWrapperVer)
+    setDistributionType(Wrapper.DistributionType.BIN)
+}
+
+sonar {
+    properties {
+        property "sonar.exclusions", "**/*Generated.java"
+    }
+}
+
+sonarLint {
+    setIgnoreFailures(false)
+    sonarlintMain.enabled = true
+    sonarlintTest.enabled = true
+}
+
+tasks.withType(Pmd).configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+sonarlintMain {
+    reports {
+        html.required = true
+        xml.required = true
+    }
+}
+
+sonarlintTest {
+    reports {
+        html.required = true
+        xml.required = true
+    }
+}
+
+pitest {
+    junit5PluginVersion='1.0.0'
+    reportDir= file('./build/reports/pit-reports')
+}
+jacoco {
+    toolVersion = "0.8.11"
+}

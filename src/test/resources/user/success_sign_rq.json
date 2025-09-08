@@ -1,0 +1,12 @@
+{
+  "name": "solid state",
+  "email": "Simone45@yahoo.com",
+  "password": "ab4cdAefg4a",
+  "phones": [
+    {
+      "number": 123123123,
+      "cityCode": 123,
+      "countryCode": "123"
+    }
+  ]
+}

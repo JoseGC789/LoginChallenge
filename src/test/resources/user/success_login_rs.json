@@ -1,0 +1,17 @@
+{
+  "id": "c77123d3-6b8b-4873-bd72-720cec154e9f",
+  "created": "Sep 07, 2025 06:36:21 AM",
+  "lastLogin": "Sep 07, 2025 06:36:28 AM",
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNYXluYXJkX0hvbWVuaWNrQGhvdG1haWwuY29tIiwiaWF0IjoxNzU3MjM3Nzg4LCJleHAiOjE3NTcyNDEzODh9.P6j7dnrp0REll9L7j4eOPgdWN6HoUPDSixYUBAE27zE",
+  "name": "back-end",
+  "email": "Maynard_Homenick@hotmail.com",
+  "password": "{bcrypt}$2a$10$LPzfXjX7dJuKsUOnnBs7EuVkI95.kE.7N7LSDnLLvEG5zqeuUeEgy",
+  "phones": [
+    {
+      "number": 123123123,
+      "cityCode": 123,
+      "countryCode": "123"
+    }
+  ],
+  "active": false
+}
