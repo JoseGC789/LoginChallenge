@@ -47,7 +47,7 @@ class GlobalAdvisorTest {
   @Test
   void testShouldReturnBadClientException() {
     BadClientException ex = new BadClientException(UUID.randomUUID().toString());
-    ResponseEntity<Map<String, Object>> actual = advisor.handleForbidden(ex);
+    ResponseEntity<Map<String, Object>> actual = advisor.handleBadClient(ex);
 
     assertEquals(BadClientException.STATUS, actual.getStatusCode());
     assertEquals(ex.getMessage(), getDetail(actual));

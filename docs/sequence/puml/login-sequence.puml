@@ -1,0 +1,44 @@
+@startuml
+autonumber
+actor Client
+
+== Login Flow ==
+Client -> UserController : POST /api/user/login\n(Authorization: Bearer token, LoginRequest)
+activate UserController
+UserController -> UserService : login(token, LoginRequest)
+activate UserService
+
+UserService -> JwtUtil : extractSubject(token)
+activate JwtUtil
+JwtUtil --> UserService : email
+deactivate JwtUtil
+
+UserService -> UserRepository : findByEmailAndTokenAndIsActiveTrue(email, token)
+UserRepository --> UserService : Optional<User>
+
+alt user not found
+    UserService -> UserController : throw SecurityForbiddenException
+    UserController -> GlobalAdvisor : handleForbidden(SecurityForbiddenException)
+    GlobalAdvisor --> Client : HTTP 403 Forbidden (error JSON)
+else
+    UserService -> PasswordService : verify(password, salt, storedPassword)
+    activate PasswordService
+    PasswordService --> UserService : boolean
+    deactivate PasswordService
+
+    alt password invalid
+        UserService -> UserController : throw SecurityForbiddenException
+        UserController -> GlobalAdvisor : handleForbidden(SecurityForbiddenException)
+        GlobalAdvisor --> Client : HTTP 403 Forbidden (error JSON)
+    else
+        UserService -> JwtUtil : generate(email)
+        JwtUtil --> UserService : newJwtToken
+        UserService -> UserRepository : save(User updated with new token)
+        UserRepository --> UserService : User
+        UserService --> UserController : LoginResponse
+        UserController --> Client : HTTP 200 OK (LoginResponse)
+    end
+end
+deactivate UserService
+deactivate UserController
+@enduml

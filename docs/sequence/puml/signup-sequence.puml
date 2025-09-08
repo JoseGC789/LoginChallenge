@@ -1,0 +1,35 @@
+@startuml
+autonumber
+actor Client
+
+== Sign Up Flow ==
+Client -> UserController : POST /api/user/sign-up\n(SignUpRequest)
+activate UserController
+UserController -> UserService : signUp(SignUpRequest)
+activate UserService
+UserService -> UserRepository : existsByEmail(email)
+UserRepository --> UserService : boolean
+alt email exists
+    UserService -> UserController : throw BadClientException
+    UserController -> GlobalAdvisor : handleBadClient(BadClientException)
+    GlobalAdvisor --> Client : HTTP 400 Bad Request (error JSON)
+else
+    UserService -> PasswordService : protect(password, salt)
+    activate PasswordService
+    PasswordService --> UserService : encodedPassword
+    deactivate PasswordService
+
+    UserService -> JwtUtil : generate(email)
+    activate JwtUtil
+    JwtUtil --> UserService : jwtToken
+    deactivate JwtUtil
+
+    UserService -> UserRepository : save(User)
+    UserRepository --> UserService : User (persisted)
+
+    UserService --> UserController : SignUpResponse
+    UserController --> Client : HTTP 200 OK (SignUpResponse)
+end
+deactivate UserService
+deactivate UserController
+@enduml

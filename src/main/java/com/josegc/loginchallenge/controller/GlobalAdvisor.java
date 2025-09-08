@@ -53,7 +53,7 @@ public class GlobalAdvisor {
   }
 
   @ExceptionHandler(BadClientException.class)
-  public ResponseEntity<Map<String, Object>> handleForbidden(BadClientException ex) {
+  public ResponseEntity<Map<String, Object>> handleBadClient(BadClientException ex) {
     return ResponseEntity.status(BadClientException.STATUS)
         .body(buildResponse(BadClientException.STATUS, ex));
   }

@@ -1,0 +1,52 @@
+@startuml
+title LoginChallenge Microservice - Component Diagram
+
+rectangle "Client" as Client
+
+package "Web Layer" {
+  [UserController] <<REST Controller>>
+  [GlobalAdvisor] <<Exception Handler>>
+}
+
+package "Security Layer" {
+  [SecurityConfig] <<Configuration>>
+  [SecurityFilterChain] <<Spring Security Filter>>
+  [AuthenticationManager] <<Spring Security>>
+}
+
+package "Service Layer" {
+  [UserService] <<Interface>>
+  [SigningAndLoginService] <<Service>>
+  [PasswordService] <<Service>>
+  [PasswordEncoder] <<Service>>
+  [JwtUtil] <<Component>>
+}
+
+package "Data Access Layer" {
+  [UserRepository] <<Repository>>
+}
+
+' -- Client interactions
+Client --> [UserController] : HTTP\n(sign-up, login)
+
+' -- Web to Service
+[UserController] --> [UserService]
+[UserService] <|.. [SigningAndLoginService]
+
+' -- Service internals
+[SigningAndLoginService] --> [PasswordService]
+[SigningAndLoginService] --> [JwtUtil]
+[SigningAndLoginService] --> [UserRepository]
+[PasswordService] --> [PasswordEncoder]
+
+' -- Exception handling
+[GlobalAdvisor] <-- [UserController] : Handles exceptions
+
+' -- Security flow (no DB connection)
+[SecurityConfig] --> [SecurityFilterChain]
+[SecurityFilterChain] --> [AuthenticationManager]
+[AuthenticationManager] --> [UserController] : Authorize requests
+
+
+
+@enduml
