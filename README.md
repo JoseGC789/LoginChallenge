@@ -153,7 +153,7 @@ cd loginchallenge
 4. Run tests and generate coverage reports:
 
 ```bash
-./gradlew test pitest sonarlintmain sonarlinttest jacocoTestReport
+./gradlew clean test intTest pitest sonarlintmain sonarlinttest sonarlintinttest jacocoTestReport
 ```
 
 5. Access the H2 console at: `http://localhost:8080/h2-console`

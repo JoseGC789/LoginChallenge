@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -24,19 +25,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 @AllArgsConstructor
+@Slf4j
 public class GlobalAdvisor {
   private static final Supplier<String> GENERIC = () -> UUID.randomUUID().toString();
   private static final FieldError NULL_FIELD =
       new FieldError(GENERIC.get(), GENERIC.get(), GENERIC.get());
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<Map<String, Object>> handleRuntimeException(Exception e) {
+  public ResponseEntity<Map<String, Object>> handleRuntimeException(Exception ex) {
+    log.error("Internal Error {}", ex.getMessage());
     return ResponseEntity.internalServerError()
-        .body(buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, e));
+        .body(buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex));
   }
 
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex) {
+    log.error("Internal Error {}", ex.getMessage());
     return ResponseEntity.internalServerError()
         .body(buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex));
   }

@@ -1,0 +1,17 @@
+spring:
+  h2:
+    console.enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+app:
+  security:
+    jwt:
+      secret: "936cca67-4882-47e6-b5ea-29b2d973bd89"
+    encryption:
+      secret: "455143a2-94ce-4f71-bef8-b33206a71997"

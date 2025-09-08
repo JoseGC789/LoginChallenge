@@ -31,5 +31,5 @@ public class SignUpRequest {
   @NotEmpty
   String password;
 
-  @Builder.Default List<PhoneDto> phones = new ArrayList<>();
+  List<PhoneDto> phones = new ArrayList<>();
 }

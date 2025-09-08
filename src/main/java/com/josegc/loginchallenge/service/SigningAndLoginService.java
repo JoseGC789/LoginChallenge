@@ -14,7 +14,6 @@ import com.josegc.loginchallenge.model.exception.BadClientException;
 import com.josegc.loginchallenge.model.exception.SecurityAuthenticationException;
 import com.josegc.loginchallenge.model.exception.SecurityForbiddenException;
 import com.josegc.loginchallenge.repository.UserRepository;
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -65,7 +65,7 @@ public class SigningAndLoginService implements UserService {
   }
 
   @Override
-  @Transactional
+  @Transactional(timeout = 5)
   public LoginResponse login(String token, LoginRequest request) {
     String email;
     try {

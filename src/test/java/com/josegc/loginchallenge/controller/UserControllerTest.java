@@ -12,6 +12,7 @@ import com.josegc.loginchallenge.model.SignUpResponse;
 import com.josegc.loginchallenge.model.exception.BadClientException;
 import com.josegc.loginchallenge.service.UserService;
 import java.io.IOException;
+import java.util.Random;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +48,7 @@ class UserControllerTest {
   void testShouldFailMalformedPassword() throws IOException {
     SignUpRequest request =
         JsonReader.readObject(SignUpRequest.class, "src/test/resources/user/success_sign_rq.json")
-            .withPassword(UUID.randomUUID() + "123");
+            .withPassword(UUID.randomUUID() + "1".repeat(new Random().nextInt(900) + 100));
     assertThrows(BadClientException.class, () -> userController.signUp(request));
   }
 
